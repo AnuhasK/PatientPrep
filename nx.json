@@ -6,6 +6,11 @@
     "production": ["default"],
     "sharedGlobals": []
   },
+  
+  "workspaceLayout": {
+    "appsDir": "apps",
+    "libsDir": "libs"
+  },
   "nxCloudId": "6891659d1f4d342ea674c0dd",
   "plugins": [
     {
