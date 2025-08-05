@@ -38,7 +38,7 @@ export const App = () => {
               testID="heading"
               role="heading"
             >
-              Welcome Apps 👋
+              Welcome Frontend 👋
             </Text>
           </View>
           <View style={styles.section}>
@@ -453,7 +453,7 @@ export const App = () => {
                     styles.marginBottomMd,
                   ]}
                 >
-                  nx build Apps
+                  nx build Frontend
                 </Text>
                 <Text style={[styles.textXS, styles.monospace, styles.comment]}>
                   # Test
@@ -465,13 +465,13 @@ export const App = () => {
                     styles.marginBottomMd,
                   ]}
                 >
-                  nx test Apps
+                  nx test Frontend
                 </Text>
                 <Text style={[styles.textXS, styles.monospace, styles.comment]}>
                   # Lint
                 </Text>
                 <Text style={[styles.textXS, styles.monospace]}>
-                  nx lint Apps
+                  nx lint Frontend
                 </Text>
                 <Text style={[styles.textXS, styles.monospace, styles.comment]}>
                   # Run them together!
@@ -483,7 +483,7 @@ export const App = () => {
                     styles.marginBottomMd,
                   ]}
                 >
-                  nx run-many -p Apps -t build test lint
+                  nx run-many -p Frontend -t build test lint
                 </Text>
               </View>
 
@@ -508,7 +508,7 @@ export const App = () => {
               </View>
               <View style={[styles.codeBlock, styles.marginBottomLg]}>
                 <Text style={[styles.textXS, styles.monospace]}>
-                  nx show project Apps
+                  nx show project Frontend
                 </Text>
               </View>
               <View style={styles.listItem}>
