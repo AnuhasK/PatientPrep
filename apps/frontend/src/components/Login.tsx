@@ -14,6 +14,7 @@ import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card, CardContent } from './ui/Card';
 import { colors, spacing, fontSize, borderRadius } from '../styles/colors';
+import { signIn } from '../services/authService';
 import { Storage } from '../utils/storage';
 
 interface LoginProps {
@@ -49,19 +50,35 @@ export const Login: React.FC<LoginProps> = ({
     setIsLoading(true);
     
     try {
-      // Simulate login API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Use Firebase Authentication
+      const user = await signIn(email, password);
       
-      // Save user data
+      // Save user data to local storage for quick access
       await Storage.setItem('patientprep_user', JSON.stringify({
-        email,
-        name: 'User',
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
         loginTime: new Date().toISOString(),
       }));
       
       onLogin();
-    } catch (error) {
-      setError('Login failed. Please try again.');
+    } catch (error: any) {
+      // Handle Firebase auth errors
+      let errorMessage = 'Login failed. Please try again.';
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email address.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/user-disabled') {
+        errorMessage = 'This account has been disabled.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

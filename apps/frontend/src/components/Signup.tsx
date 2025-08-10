@@ -14,6 +14,7 @@ import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card, CardContent } from './ui/Card';
 import { colors, spacing, fontSize, borderRadius } from '../styles/colors';
+import { signUp } from '../services/authService';
 import { Storage } from '../utils/storage';
 
 interface SignupProps {
@@ -72,13 +73,15 @@ export const Signup: React.FC<SignupProps> = ({
     setIsLoading(true);
     
     try {
-      // Simulate signup API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Use Firebase Authentication
+      const user = await signUp(email, password, fullName);
       
-      // Save user data
+      // Save user data to local storage for quick access
       await Storage.setItem('patientprep_user', JSON.stringify({
-        email,
-        fullName,
+        uid: user.uid,
+        email: user.email,
+        displayName: user.displayName,
+        fullName: fullName,
         signupTime: new Date().toISOString(),
         biometricEnabled: false
       }));
@@ -93,8 +96,21 @@ export const Signup: React.FC<SignupProps> = ({
           }
         ]
       );
-    } catch (error) {
-      setError('Failed to create account. Please try again.');
+    } catch (error: any) {
+      // Handle Firebase auth errors
+      let errorMessage = 'Failed to create account. Please try again.';
+      
+      if (error.code === 'auth/email-already-in-use') {
+        errorMessage = 'An account with this email already exists.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/weak-password') {
+        errorMessage = 'Password is too weak. Please choose a stronger password.';
+      } else if (error.code === 'auth/operation-not-allowed') {
+        errorMessage = 'Email/password accounts are not enabled.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

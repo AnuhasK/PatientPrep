@@ -43,6 +43,13 @@ Thumbs.db
 .cursor/rules/nx-rules.mdc
 .github/instructions/nx.instructions.md
 
+# Environment variables (contains sensitive Firebase keys)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
 # Expo
 node_modules/
 .expo/

@@ -13,6 +13,7 @@ import { Button } from './ui/Button';
 import { Input } from './ui/Input';
 import { Card, CardContent } from './ui/Card';
 import { colors, spacing, fontSize, borderRadius } from '../styles/colors';
+import { resetPassword } from '../services/authService';
 
 interface ForgotPasswordProps {
   onBackToLogin: () => void;
@@ -42,11 +43,22 @@ export const ForgotPassword: React.FC<ForgotPasswordProps> = ({
     setIsLoading(true);
 
     try {
-      // Simulate password reset request
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Use Firebase password reset
+      await resetPassword(email);
       setSuccess(true);
-    } catch (err) {
-      setError('Failed to send reset email. Please try again.');
+    } catch (error: any) {
+      // Handle Firebase auth errors
+      let errorMessage = 'Failed to send reset email. Please try again.';
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email address.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Please enter a valid email address.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many requests. Please try again later.';
+      }
+      
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }

@@ -6,6 +6,7 @@ import {
   View,
   Text,
 } from 'react-native';
+import { AuthProvider, useAuth } from '../context/AuthContext';
 import { Login } from '../components/Login';
 import { HomePage } from '../components/HomePage';
 import { Navigation } from '../components/Navigation';
@@ -19,44 +20,15 @@ import { colors } from '../styles/colors';
 import { Storage } from '../utils/storage';
 
 type AuthState = 'login' | 'signup' | 'forgot-password';
-type AppState = 'auth' | 'main';
 
-const App = () => {
-  const [appState, setAppState] = useState<AppState>('auth');
+const MainApp = () => {
+  const { user, loading, isAuthenticated } = useAuth();
   const [authState, setAuthState] = useState<AuthState>('login');
   const [activeTab, setActiveTab] = useState('home');
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Check authentication status on app load
-  useEffect(() => {
-    checkAuthStatus();
-  }, []);
-
-  const checkAuthStatus = async () => {
-    try {
-      const user = await Storage.getItem('patientprep_user');
-      if (user) {
-        setAppState('main');
-      }
-    } catch (error) {
-      console.error('Error checking auth status:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   const handleLogin = () => {
-    setAppState('main');
-  };
-
-  const handleLogout = async () => {
-    try {
-      await Storage.clear();
-      setAppState('auth');
-      setActiveTab('home');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
+    // Firebase auth state will automatically update via useAuth hook
+    setAuthState('login');
   };
 
   const renderPlaceholderScreen = (title: string) => (
@@ -77,13 +49,13 @@ const App = () => {
       case 'questions':
         return <QuestionBuilder />;
       case 'profile':
-        return <Profile onLogout={handleLogout} />;
+        return <Profile />;
       default:
         return <HomePage onNavigate={setActiveTab} />;
     }
   };
 
-  if (isLoading) {
+  if (loading) {
     return (
       <SafeAreaView style={styles.container}>
         <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
@@ -98,7 +70,7 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <StatusBar barStyle="dark-content" backgroundColor={colors.background} />
       
-      {appState === 'auth' ? (
+      {!isAuthenticated ? (
         authState === 'login' ? (
           <Login
             onLogin={handleLogin}
@@ -167,5 +139,13 @@ const styles = StyleSheet.create({
     color: colors.mutedForeground,
   },
 });
+
+const App = () => {
+  return (
+    <AuthProvider>
+      <MainApp />
+    </AuthProvider>
+  );
+};
 
 export default App;

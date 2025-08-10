@@ -9,6 +9,8 @@ import {
   Linking,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../context/AuthContext';
+import { signOutUser } from '../services/authService';
 import { Storage } from '../utils/storage';
 
 // Colors
@@ -45,10 +47,11 @@ const colors = {
 };
 
 interface ProfileProps {
-  onLogout?: () => void;
+  // No props needed - Firebase auth state handles everything
 }
 
-export const Profile: React.FC<ProfileProps> = ({ onLogout }) => {
+export const Profile: React.FC<ProfileProps> = () => {
+  const { user, forceLogout } = useAuth();
   const [darkMode, setDarkMode] = useState(false);
   const [biometricLock, setBiometricLock] = useState(true);
   const [notifications, setNotifications] = useState(true);
@@ -64,6 +67,50 @@ export const Profile: React.FC<ProfileProps> = ({ onLogout }) => {
   useEffect(() => {
     loadDataStats();
   }, []);
+
+  const handleLogout = async () => {
+    console.log('Logout button pressed');
+    Alert.alert(
+      'Sign Out',
+      'Are you sure you want to sign out?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Sign Out',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              console.log('Starting logout process...');
+              
+              // Clear local storage first
+              console.log('Clearing local storage...');
+              await Storage.removeItem('patientprep_user');
+              console.log('Local storage cleared');
+              
+              // Sign out from Firebase
+              console.log('Calling signOutUser...');
+              await signOutUser();
+              console.log('Firebase signOut completed');
+              
+              // For browser environments, manually force auth state reset
+              if (typeof window !== 'undefined') {
+                console.log('Browser detected, forcing auth state reset...');
+                forceLogout();
+              }
+              
+              console.log('Logout completed successfully');
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to sign out. Please try again.');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const loadDataStats = async () => {
     try {
@@ -345,14 +392,13 @@ export const Profile: React.FC<ProfileProps> = ({ onLogout }) => {
             <Text style={styles.linkButtonText}>Contact Support</Text>
           </TouchableOpacity>
 
-          {onLogout && (
-            <>
-              <View style={styles.separator} />
-              <TouchableOpacity style={[styles.linkButton, styles.logoutButton]} onPress={onLogout}>
-                <Text style={[styles.linkButtonText, styles.logoutText]}>Sign Out</Text>
-              </TouchableOpacity>
-            </>
-          )}
+          {/* Always show logout button for authenticated users */}
+          <>
+            <View style={styles.separator} />
+            <TouchableOpacity style={[styles.linkButton, styles.logoutButton]} onPress={handleLogout}>
+              <Text style={[styles.linkButtonText, styles.logoutText]}>Sign Out</Text>
+            </TouchableOpacity>
+          </>
         </View>
 
         {/* Footer */}
