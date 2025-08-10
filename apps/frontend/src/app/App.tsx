@@ -9,6 +9,12 @@ import {
 import { Login } from '../components/Login';
 import { HomePage } from '../components/HomePage';
 import { Navigation } from '../components/Navigation';
+import { Signup } from '../components/Signup';
+import { ForgotPassword } from '../components/ForgotPassword';
+import { SymptomLogger } from '../components/SymptomLogger';
+import { MedicationTracker } from '../components/MedicationTracker';
+import { QuestionBuilder } from '../components/QuestionBuilder';
+import { Profile } from '../components/Profile';
 import { colors } from '../styles/colors';
 import { Storage } from '../utils/storage';
 
@@ -65,13 +71,13 @@ const App = () => {
       case 'home':
         return <HomePage onNavigate={setActiveTab} />;
       case 'symptoms':
-        return renderPlaceholderScreen('Symptom Logger');
+        return <SymptomLogger />;
       case 'medications':
-        return renderPlaceholderScreen('Medication Tracker');
+        return <MedicationTracker />;
       case 'questions':
-        return renderPlaceholderScreen('Question Builder');
+        return <QuestionBuilder />;
       case 'profile':
-        return renderPlaceholderScreen('Profile');
+        return <Profile onLogout={handleLogout} />;
       default:
         return <HomePage onNavigate={setActiveTab} />;
     }
@@ -99,14 +105,15 @@ const App = () => {
             onSwitchToSignup={() => setAuthState('signup')}
             onForgotPassword={() => setAuthState('forgot-password')}
           />
+        ) : authState === 'signup' ? (
+          <Signup
+            onSignup={handleLogin}
+            onSwitchToLogin={() => setAuthState('login')}
+          />
         ) : (
-          // Placeholder for other auth screens
-          <View style={styles.placeholderContainer}>
-            <Text style={styles.placeholderText}>
-              {authState === 'signup' ? 'Sign Up' : 'Forgot Password'}
-            </Text>
-            <Text style={styles.placeholderSubtext}>Coming soon...</Text>
-          </View>
+          <ForgotPassword
+            onBackToLogin={() => setAuthState('login')}
+          />
         )
       ) : (
         <View style={styles.mainContainer}>
