@@ -1,0 +1,235 @@
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --font-size: 14px;
+  --background: #ffffff;
+  --foreground: #2c3e50;
+  --card: #ffffff;
+  --card-foreground: #2c3e50;
+  --popover: #ffffff;
+  --popover-foreground: #2c3e50;
+  --primary: #27ae60;
+  --primary-foreground: #ffffff;
+  --secondary: #e8f8f0;
+  --secondary-foreground: #1e8449;
+  --muted: #f8fffe;
+  --muted-foreground: #7f8c8d;
+  --accent: #2ecc71;
+  --accent-foreground: #ffffff;
+  --destructive: #e74c3c;
+  --destructive-foreground: #ffffff;
+  --border: rgba(0, 0, 0, 0.1);
+  --input: transparent;
+  --input-background: #f8fffe;
+  --switch-background: #e8f8f0;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --ring: #27ae60;
+  --chart-1: #27ae60;
+  --chart-2: #2ecc71;
+  --chart-3: #1e8449;
+  --chart-4: #e8f8f0;
+  --chart-5: #27ae60;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #2c3e50;
+  --sidebar-primary: #27ae60;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e8f8f0;
+  --sidebar-accent-foreground: #1e8449;
+  --sidebar-border: rgba(0, 0, 0, 0.1);
+  --sidebar-ring: #27ae60;
+}
+
+.dark {
+  --background: #2c3e50;
+  --foreground: #ffffff;
+  --card: #34495e;
+  --card-foreground: #ffffff;
+  --popover: #34495e;
+  --popover-foreground: #ffffff;
+  --primary: #2ecc71;
+  --primary-foreground: #ffffff;
+  --secondary: #1e8449;
+  --secondary-foreground: #e8f8f0;
+  --muted: #34495e;
+  --muted-foreground: #bdc3c7;
+  --accent: #27ae60;
+  --accent-foreground: #ffffff;
+  --destructive: #e74c3c;
+  --destructive-foreground: #ffffff;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: #34495e;
+  --ring: #2ecc71;
+  --font-weight-medium: 500;
+  --font-weight-normal: 400;
+  --chart-1: #2ecc71;
+  --chart-2: #27ae60;
+  --chart-3: #1e8449;
+  --chart-4: #e8f8f0;
+  --chart-5: #27ae60;
+  --sidebar: #34495e;
+  --sidebar-foreground: #ffffff;
+  --sidebar-primary: #2ecc71;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e8449;
+  --sidebar-accent-foreground: #e8f8f0;
+  --sidebar-border: rgba(255, 255, 255, 0.1);
+  --sidebar-ring: #2ecc71;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-input-background: var(--input-background);
+  --color-switch-background: var(--switch-background);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+    font-family: 'Inter', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+}
+
+/**
+ * Base typography. This is not applied to elements which have an ancestor with a Tailwind text class.
+ */
+@layer base {
+  :where(:not(:has([class*=" text-"]), :not(:has([class^="text-"])))) {
+    h1 {
+      font-size: 1.875rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    h3 {
+      font-size: 1.25rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    h4 {
+      font-size: 1rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    p {
+      font-size: 1rem;
+      font-weight: var(--font-weight-normal);
+      line-height: 1.6;
+      color: var(--foreground);
+    }
+
+    label {
+      font-size: 0.875rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+      color: var(--foreground);
+    }
+
+    button {
+      font-size: 1rem;
+      font-weight: var(--font-weight-medium);
+      line-height: 1.5;
+    }
+
+    input {
+      font-size: 1rem;
+      font-weight: var(--font-weight-normal);
+      line-height: 1.5;
+    }
+  }
+}
+
+html {
+  font-size: var(--font-size);
+}
+
+/* Mobile-first responsive design */
+@media (max-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+  
+  .container {
+    padding: 1rem;
+  }
+}
+
+/* Chat bubble styles */
+.chat-bubble-user {
+  background: #e8f8f0;
+  color: #1e8449;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+}
+
+.chat-bubble-app {
+  background: #ffffff;
+  color: #2c3e50;
+  border: 1px solid #27ae60;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+}
+
+/* Touch-friendly targets */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  :root {
+    --border: rgba(0, 0, 0, 0.3);
+    --foreground: #000000;
+  }
+}

@@ -1,0 +1,60 @@
+// Title
+title PatientPrep SL – Solution Architecture Diagram
+
+// ===== Mobile App =====
+Mobile App [icon: mobile, color: blue] {
+  Application Layer {
+    UI [icon: smartphone, label: "UI (Screens, Components)"]
+    Local Storage [icon: database, label: "Local Storage (expo-sqlite, SecureStore)"]
+    Agentic AI Nudges [icon: brain, label: "Agentic AI Nudges (Rule-Based, JSON Logic)"]
+    Static Graph JSON [icon: file-text, label: "Graph Knowledge (Offline JSON)"]
+  }
+
+  Framework [icon: code] {
+    React Native [icon: react, label: "React Native"]
+    Expo Go [icon: smartphone, label: "Expo Go"]
+  }
+}
+
+// ===== Cloud Backend =====
+Cloud Backend [icon: cloud, color: green] {
+  Spring Boot API [icon: spring, label: "Spring Boot API (Non-PHI Services)"]
+  FastAPI Service [icon: python, label: "Python FastAPI (AI/ML Services)"]
+}
+
+// ===== Firebase Services =====
+Firebase [icon: gcp-firebase, color: orange] {
+  Firebase Auth [icon: user-check, label: "Firebase Auth (Email/Password)"]
+  Firestore DB [icon: gcp-firestore, label: "Firestore (App Config, No PHI)"]
+  Cloud Messaging [icon: message-circle, label: "Cloud Messaging (FCM)"]
+  Analytics [icon: bar-chart-2, label: "Firebase Analytics (Non-PHI)"]
+}
+
+// ===== Neo4j Cloud (Future Use) =====
+Neo4j Aura [icon: neo4j, color: purple] {
+  Knowledge Graph [icon: graph, label: "Neo4j Graph (Optional Cloud AI)"]
+}
+
+// ===== Privacy Boundary =====
+Privacy Boundary [color: red, style: dashed] {
+  Local Device [icon: shield, label: "Local Device (Encrypted PHI Storage)"]
+}
+
+// ===== Connections =====
+Expo Go > React Native
+React Native > UI
+UI > Local Storage: "Stores PHI"
+UI > Agentic AI Nudges: "Triggers Suggestions"
+Agentic AI Nudges > Static Graph JSON: "Local Graph Lookup"
+Agentic AI Nudges > FastAPI Service: "Optional ML Queries (Non-PHI)"
+FastAPI Service > Knowledge Graph: "Optional Cloud Queries"
+
+UI > Spring Boot API: "Non-PHI API Calls"
+Spring Boot API > Cloud Messaging: "Send Reminders"
+Spring Boot API > Firestore DB: "App Content (No PHI)"
+UI > Firebase Auth: "Login/Auth"
+UI > Analytics: "Event Tracking (Non-PHI)"
+
+Local Storage -> Local Device: "Encrypted Health Data (PHI)"
+
+
